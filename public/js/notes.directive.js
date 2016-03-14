@@ -7,10 +7,27 @@
         return {
             restrict: 'AE',     //Attribute or Element
             scope: {},          //Isolated scope
+            templateUrl: 'templates/notepad.html',
             link: function(scope, elem, attrs) {
-                //empty
+                //init
+                var editor = elem.find('#editor');
+                
+                scope.notes = notesFactory.getAll(); // load notes
+
+                editor.bind('keyup keydown', function() {
+                    scope.noteText = editor.text().trim();
+                });
+
+                //Edit
+                scope.openEditor = function(index) {
+                    if (index !== undefined) {
+                        scope.noteText = notesFactory.get(index).content;
+                        scope.index = index;
+                    } else {
+                        scope.noteText = undefined;
+                    }
+                };
             },
-            templateUrl: 'templates/notepad.html'
         };
     };
 
